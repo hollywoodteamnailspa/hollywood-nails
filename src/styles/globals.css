@@ -1,0 +1,90 @@
+/* Hollywood Team Nail Spa — Earthy bamboo salon aesthetic */
+:root {
+  --cream: #CDE0CA;
+  --cream-dark: #BBD3B8;
+  --sand: #D4C4A8;
+  --warm-tan: #C7A97B;
+  --bamboo: #C7A97B;
+  --bamboo-dark: #A8854A;
+  --sage: #8FA68E;
+  --sage-light: #B2C8B1;
+  --sage-pale: #E8EEE7;
+  --moss: #667A68;
+  --charcoal: #241E18;
+  --warm-gray: #3B3228;
+  --white: #FEFCF8;
+  --shadow-soft: 0 2px 12px rgba(63, 74, 66, 0.08);
+  --shadow-card: 0 4px 24px rgba(63, 74, 66, 0.10);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'DM Sans', -apple-system, sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--cream);
+  color: var(--charcoal);
+  min-height: 100vh;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(143, 166, 142, 0.05) 0px,
+    rgba(143, 166, 142, 0.05) 1px,
+    transparent 1px,
+    transparent 48px
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--cream-dark); }
+::-webkit-scrollbar-thumb { background: var(--sand); border-radius: 3px; }
+
+:focus-visible {
+  outline: 2px solid var(--sage);
+  outline-offset: 2px;
+}
+
+button {
+  font-family: var(--font-body);
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+input, select, textarea {
+  font-family: var(--font-body);
+  font-size: 15px;
+}
