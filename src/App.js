@@ -65,9 +65,7 @@ export default function App() {
   const handleSave = useCallback(async (appt, targetDate) => {
     const tDate = targetDate || selectedDate;
     appt.date = tDate;
-
     await saveAppointmentToDB(appt);
-
     setAppointments(prev => {
       const updated = { ...prev };
       if (modal?.editing) {
@@ -83,10 +81,18 @@ export default function App() {
         : [...dayList, appt];
       return updated;
     });
-
     setModal(null);
     setSelectedDate(tDate);
   }, [selectedDate, modal]);
+
+  const handleDelete = useCallback(async (id) => {
+    if (!window.confirm('Remove this appointment?')) return;
+    await deleteAppointmentFromDB(id);
+    setAppointments(prev => ({
+      ...prev,
+      [selectedDate]: (prev[selectedDate] || []).filter(a => a.id !== id),
+    }));
+  }, [selectedDate]);
 
   const handleToggleComplete = useCallback(async (id) => {
     const dayList = appointments[selectedDate] || [];
@@ -99,13 +105,6 @@ export default function App() {
       [selectedDate]: (prev[selectedDate] || []).map(a => a.id === id ? updated : a),
     }));
   }, [appointments, selectedDate]);
-    if (!window.confirm('Remove this appointment?')) return;
-    await deleteAppointmentFromDB(id);
-    setAppointments(prev => ({
-      ...prev,
-      [selectedDate]: (prev[selectedDate] || []).filter(a => a.id !== id),
-    }));
-  }, [selectedDate]);
 
   const [narrow, setNarrow] = useState(window.innerWidth < 700);
   useEffect(() => {
