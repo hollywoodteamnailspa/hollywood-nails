@@ -24,6 +24,7 @@ export const loadAppointmentsFromDB = async () => {
       prefix: row.prefix,
       phoneNum: row.phone_num,
       fullPhone: row.full_phone,
+      completed: row.completed || false,
     });
   });
   return grouped;
@@ -43,6 +44,7 @@ export const saveAppointmentToDB = async (appt) => {
       prefix: appt.prefix || null,
       phone_num: appt.phoneNum || null,
       full_phone: appt.fullPhone || null,
+      completed: appt.completed || false,
     });
   if (error) console.error('Save error:', error);
 };

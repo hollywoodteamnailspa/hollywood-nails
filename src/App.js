@@ -88,7 +88,17 @@ export default function App() {
     setSelectedDate(tDate);
   }, [selectedDate, modal]);
 
-  const handleDelete = useCallback(async (id) => {
+  const handleToggleComplete = useCallback(async (id) => {
+    const dayList = appointments[selectedDate] || [];
+    const appt = dayList.find(a => a.id === id);
+    if (!appt) return;
+    const updated = { ...appt, completed: !appt.completed };
+    await saveAppointmentToDB(updated);
+    setAppointments(prev => ({
+      ...prev,
+      [selectedDate]: (prev[selectedDate] || []).map(a => a.id === id ? updated : a),
+    }));
+  }, [appointments, selectedDate]);
     if (!window.confirm('Remove this appointment?')) return;
     await deleteAppointmentFromDB(id);
     setAppointments(prev => ({
@@ -143,6 +153,7 @@ export default function App() {
             onAdd={() => setModal({ editing: null })}
             onEdit={(appt) => setModal({ editing: appt })}
             onDelete={handleDelete}
+            onToggleComplete={handleToggleComplete}
           />
         </section>
       </main>

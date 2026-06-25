@@ -83,29 +83,31 @@ const styles = {
     textTransform: 'uppercase',
     fontWeight: 500,
   },
-  apptCard: {
+  apptCard: (completed) => ({
     padding: '14px 16px',
     borderRadius: 'var(--radius-md)',
-    border: '1px solid var(--cream-dark)',
-    background: 'var(--cream)',
+    border: completed ? '1px solid #B8D4B5' : '1px solid var(--cream-dark)',
+    background: completed ? '#EEF5ED' : 'var(--cream)',
     display: 'grid',
     gridTemplateColumns: '1fr auto',
     gap: '8px 16px',
     alignItems: 'start',
     marginBottom: '6px',
     cursor: 'pointer',
-  },
+    opacity: completed ? 0.75 : 1,
+  }),
   apptMain: {
     display: 'flex',
     flexDirection: 'column',
     gap: '4px',
   },
-  apptService: {
+  apptService: (completed) => ({
     fontSize: '15px',
     fontFamily: 'var(--font-display)',
-    color: 'var(--charcoal)',
+    color: completed ? 'var(--moss)' : 'var(--charcoal)',
     fontWeight: 500,
-  },
+    textDecoration: completed ? 'line-through' : 'none',
+  }),
   apptMeta: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -149,6 +151,21 @@ const styles = {
     justifyContent: 'center',
     cursor: 'pointer',
     fontFamily: 'var(--font-body)',
+  }),
+  checkBtn: (completed) => ({
+    width: '30px',
+    height: '30px',
+    borderRadius: 'var(--radius-sm)',
+    border: completed ? '1px solid #7AAD78' : '1px solid var(--sand)',
+    background: completed ? '#7AAD78' : 'var(--white)',
+    color: completed ? 'var(--white)' : 'var(--moss)',
+    fontSize: '15px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    fontFamily: 'var(--font-body)',
+    fontWeight: 600,
   }),
   summaryBar: {
     padding: '14px 24px',
@@ -245,7 +262,7 @@ const styles = {
   },
 };
 
-export default function DayView({ dateLabel, appointments, onAdd, onEdit, onDelete, allAppointments, selectedDate }) {
+export default function DayView({ dateLabel, appointments, onAdd, onEdit, onDelete, onToggleComplete, allAppointments, selectedDate }) {
   const [showWeekly, setShowWeekly] = useState(false);
 
   const sorted = [...appointments].sort((a, b) => {
@@ -329,7 +346,7 @@ export default function DayView({ dateLabel, appointments, onAdd, onEdit, onDele
                 {appts.map(appt => (
                   <div
                     key={appt.id}
-                    style={styles.apptCard}
+                    style={styles.apptCard(appt.completed)}
                     onClick={() => onEdit(appt)}
                     role="button"
                     tabIndex={0}
@@ -339,7 +356,7 @@ export default function DayView({ dateLabel, appointments, onAdd, onEdit, onDele
                       {appt.customerName && (
                         <span style={styles.nameTag}>{appt.customerName}</span>
                       )}
-                      <span style={styles.apptService}>{appt.service}</span>
+                      <span style={styles.apptService(appt.completed)}>{appt.service}</span>
                       <div style={styles.apptMeta}>
                         {appt.tech && (
                           <span style={styles.techTag}>✦ {appt.tech}</span>
@@ -352,6 +369,12 @@ export default function DayView({ dateLabel, appointments, onAdd, onEdit, onDele
                       </div>
                     </div>
                     <div style={styles.actions} onClick={e => e.stopPropagation()}>
+                      <button
+                        style={styles.checkBtn(appt.completed)}
+                        onClick={() => onToggleComplete(appt.id)}
+                        aria-label={appt.completed ? 'Mark incomplete' : 'Mark complete'}
+                        title={appt.completed ? 'Uncheck' : 'Mark as done'}
+                      >✓</button>
                       <button
                         style={styles.iconBtn(false)}
                         onClick={() => onEdit(appt)}
